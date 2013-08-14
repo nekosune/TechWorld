@@ -7,6 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import com.nekokittygames.TechWorld.TechWorld;
+import com.nekokittygames.TechWorld.schematics.Schematic;
+import com.nekokittygames.TechWorld.schematics.SchematicManager;
 
 public class ItemLighter extends Item {
 
@@ -49,6 +51,9 @@ public class ItemLighter extends Item {
                     "fire.ignite", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
             /** replace with your fire block **/
             par3World.setBlock(par4, par5, par6, TechWorld.fire.blockID);
+            Schematic trap=SchematicManager.loadSchematic("trap-house", par3World);
+            SchematicManager.PlaceSchematic(trap, par3World, par4, par5, par6);
+            
         }
         par1ItemStack.damageItem(1, par2EntityPlayer);
         return true;

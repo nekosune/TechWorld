@@ -21,8 +21,27 @@ public class Schematic {
         Alpha,
     };
     private Materials materials;
-    private byte[] blocks;
+    private byte[] rawBlocks;
     private byte[] blockData;
+    private byte[] addBlockId;
+    short[] blocks;
+    public byte[] getRawBlocks() {
+        return rawBlocks;
+    }
+    public void setRawBlocks(byte[] rawBlocks) {
+        this.rawBlocks = rawBlocks;
+    }
+    public byte[] getAddBlockId() {
+        return addBlockId;
+    }
+    public void setAddBlockId(byte[] addBlockId) {
+        this.addBlockId = addBlockId;
+    }
+    public void setBlocks(short[] blocks) {
+        this.blocks = blocks;
+    }
+
+
     private List<Entity> entities;
     private List<TileEntity> tileEntities;
     /**
@@ -72,18 +91,6 @@ public class Schematic {
      */
     public void setMaterials(Materials materials) {
         this.materials = materials;
-    }
-    /**
-     * @return the blocks
-     */
-    public byte[] getBlocks() {
-        return blocks;
-    }
-    /**
-     * @param blocks the blocks to set
-     */
-    public void setBlocks(byte[] blocks) {
-        this.blocks = blocks;
     }
     /**
      * @return the blockData
@@ -136,7 +143,35 @@ public class Schematic {
         schematic.setWidth(nbtSchematic.getShort("Width"));
         schematic.setLength(nbtSchematic.getShort("Length"));
         schematic.setMaterials(Materials.valueOf(nbtSchematic.getString("Materials")));
-        schematic.setBlocks(nbtSchematic.getByteArray("Blocks"));
+        schematic.setRawBlocks(nbtSchematic.getByteArray("Blocks"));
+        if(nbtSchematic.hasKey("AddBlocks"))
+        {
+            schematic.setAddBlockId(nbtSchematic.getByteArray("AddBlocks"));
+        }
+        schematic.blocks=new short[schematic.getRawBlocks().length];
+        if(schematic.getAddBlockId()==null)
+        {
+            schematic.setAddBlockId(new byte[0]);
+        }
+        byte[] adds=schematic.getAddBlockId();
+        for(int i=0;i<schematic.getRawBlocks().length;i++)
+        {
+            if((i>>1)>=adds.length)
+            {
+                schematic.blocks[i]=(short)(schematic.rawBlocks[i]&0xFF);
+            }
+            else
+            {
+                if((i &1)==0)
+                {
+                    schematic.blocks[i]= (short) (((adds[i>>1]&0x0F) << 8)+(schematic.rawBlocks[i] & 0xFF));
+                }
+                else
+                {
+                    schematic.blocks[i]= (short) (((adds[i>>1]&0xF0) << 4)+(schematic.rawBlocks[i] & 0xFF));
+                }
+            }
+        }
         schematic.setBlockData(nbtSchematic.getByteArray("Data"));
         List<Entity> ents=new LinkedList<Entity>();
         NBTTagList entities=nbtSchematic.getTagList("Entities");
@@ -158,5 +193,8 @@ public class Schematic {
         }
         schematic.setTileEntities(tiles);
         return schematic;
+    }
+    public short[] getBlocks() {
+        return blocks;
     }
 }
