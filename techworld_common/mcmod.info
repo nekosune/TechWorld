@@ -1,0 +1,19 @@
+[
+{
+  "modid": "TechWorld",
+  "name": "Tech World",
+  "description": "Fed up of nature? travel to a world where technology is king",
+  "version": "@VERSION@",
+  "url": "http://www.nekokittygames.com/",
+  "updateUrl": "",
+  "authorList": [
+    "nekosune"
+  ],
+  "credits": "By nekosune",
+  "screenshots": [
+  ],
+  "parent":"",
+  "dependencies": [
+  ]
+}
+]

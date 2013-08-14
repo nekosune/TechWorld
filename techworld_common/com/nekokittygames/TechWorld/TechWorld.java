@@ -13,7 +13,6 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.WorldType;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.common.FMLLog;
@@ -28,12 +27,11 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = TechWorld.ID, name = TechWorld.NAME, version = TechWorld.VERSION, modLanguage = "java")
+@Mod(modid = TechWorld.ID, modLanguage = "java")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class TechWorld {
     public static final String ID      = "TechWorld";
-    public static final String VERSION = "1.0";
-    public static final String NAME    = "Tech World";
+
     public static  BlockTechPortal TechPortal;
     public static Item portalSpawner;
     public static Item portalLighter;
