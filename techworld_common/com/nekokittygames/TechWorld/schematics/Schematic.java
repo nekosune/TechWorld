@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.nekokittygames.TechWorld.TechWorld;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
@@ -153,25 +155,75 @@ public class Schematic {
         {
             schematic.setAddBlockId(new byte[0]);
         }
-        byte[] adds=schematic.getAddBlockId();
-        for(int i=0;i<schematic.getRawBlocks().length;i++)
+        //byte[] adds=schematic.getAddBlockId();
+//        for(int i=0;i<schematic.getRawBlocks().length;i++)
+//        {
+//            if(i==65)
+//                TechWorld.logging.info("Debugger here!");
+//            if((i>>1)>=adds.length)
+//            {
+//                schematic.blocks[i]=(short)(schematic.rawBlocks[i]&0xFF);
+//            }
+//            else
+//            {
+//                if((i &1)==0)
+//                {
+//                    int index=i>>1;
+//                    byte step1=adds[index];
+//                    int step2=step1&0x0F;
+//                    int step3=step2 << 8;
+//                    int step4=schematic.rawBlocks[i] & 0xFF;
+//                    short id=(short) ((step3)+(step4));
+//                    schematic.blocks[i]= id;
+//                }
+//                else
+//                {
+//                    int index=i>>1;
+//                    byte step1=adds[index];
+//                    int step2=step1&0xF0;
+//                    int step3=step2 << 4;
+//                    int step4=schematic.rawBlocks[i] & 0xFF;
+//                    short id=(short) ((step3)+(step4));
+//                    schematic.blocks[i]= id;
+//                }
+//            }
+//        }
+        if(schematic.getAddBlockId()!=null)
         {
-            if((i>>1)>=adds.length)
+            int size=schematic.height*schematic.length*schematic.width;
+            byte[] add=new byte[size+(size & 1)];
+            for(int i=0;i<add.length;i++)
             {
-                schematic.blocks[i]=(short)(schematic.rawBlocks[i]&0xFF);
+                add[i]=0;
             }
-            else
+            int counter=0;
+            for(int i=0;i<add.length;i+=2)
             {
-                if((i &1)==0)
-                {
-                    schematic.blocks[i]= (short) (((adds[i>>1]&0x0F) << 8)+(schematic.rawBlocks[i] & 0xFF));
-                }
-                else
-                {
-                    schematic.blocks[i]= (short) (((adds[i>>1]&0xF0) << 4)+(schematic.rawBlocks[i] & 0xFF));
-                }
+                if(counter>=schematic.getAddBlockId().length)
+                    break;
+                if(i==33 || i==34)
+                    TechWorld.logging.info("Debugger");
+                add[i]=schematic.getAddBlockId()[counter++];
+            }
+            counter=0;
+            for(int i=1;i<add.length;i+=2)
+            {
+                add[i]=(byte) (add[i-1]&0xf);
+            }
+            for(int i=0;i<add.length;i+=2)
+            {
+                add[i]>>=4;
+            }
+            for(int i=0;i<add.length;i++)
+            {
+                add[i]<<=8;
+            }
+            for(int i=0;i<schematic.getRawBlocks().length;i++)
+            {
+                schematic.blocks[i]=(short)(schematic.rawBlocks[i] | add[i]);
             }
         }
+        
         schematic.setBlockData(nbtSchematic.getByteArray("Data"));
         List<Entity> ents=new LinkedList<Entity>();
         NBTTagList entities=nbtSchematic.getTagList("Entities");
