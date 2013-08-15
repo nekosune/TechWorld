@@ -155,7 +155,7 @@ public class Schematic {
         {
             schematic.setAddBlockId(new byte[0]);
         }
-        //byte[] adds=schematic.getAddBlockId();
+//        byte[] adds=schematic.getAddBlockId();
 //        for(int i=0;i<schematic.getRawBlocks().length;i++)
 //        {
 //            if(i==65)
@@ -188,42 +188,58 @@ public class Schematic {
 //                }
 //            }
 //        }
-        if(schematic.getAddBlockId()!=null)
+//        if(schematic.getAddBlockId()!=null)
+//        {
+//            int size=schematic.height*schematic.length*schematic.width;
+//            byte[] add=new byte[size+(size & 1)];
+//            for(int i=0;i<add.length;i++)
+//            {
+//                add[i]=0;
+//            }
+//            int counter=0;
+//            for(int i=0;i<add.length;i+=2)
+//            {
+//                add[i]=schematic.getAddBlockId()[counter++];
+//            }
+//            counter=0;
+//            for(int i=1;i<add.length;i+=2)
+//            {
+//                add[i]=(byte) (add[i-1]&0xf);
+//            }
+//            for(int i=0;i<add.length;i+=2)
+//            {
+//                add[i]>>=4;
+//            }
+//            for(int i=0;i<add.length;i++)
+//            {
+//                add[i]<<=8;
+//            }
+//            for(int i=0;i<schematic.getRawBlocks().length;i++)
+//            {
+//                schematic.blocks[i]=(short)(schematic.rawBlocks[i] | add[i]);
+//            }
+//        }
+        boolean extra = nbtSchematic.hasKey("Add") || nbtSchematic.hasKey("AddBlocks");
+        byte extraBlocks[] = null;
+        byte extraBlocksNibble[] = null;
+        if (nbtSchematic.hasKey("AddBlocks")) {
+            extraBlocksNibble = nbtSchematic.getByteArray("AddBlocks");
+            extraBlocks = new byte[extraBlocksNibble.length * 2];
+            for (int i = 0; i < extraBlocksNibble.length; i++) {
+                extraBlocks[i * 2 + 0] = (byte) ((extraBlocksNibble[i] >> 4) & 0xF);
+                extraBlocks[i * 2 + 1] = (byte) (extraBlocksNibble[i] & 0xF);
+            }
+        } else if (nbtSchematic.hasKey("Add")) {
+            extraBlocks = nbtSchematic.getByteArray("Add");
+        }
+        for(int i=0;i<schematic.rawBlocks.length;i++)
         {
-            int size=schematic.height*schematic.length*schematic.width;
-            byte[] add=new byte[size+(size & 1)];
-            for(int i=0;i<add.length;i++)
+            schematic.blocks[i]=(short) (schematic.rawBlocks[i]& 0xFF);
+            if(extra)
             {
-                add[i]=0;
-            }
-            int counter=0;
-            for(int i=0;i<add.length;i+=2)
-            {
-                if(counter>=schematic.getAddBlockId().length)
-                    break;
-                if(i==33 || i==34)
-                    TechWorld.logging.info("Debugger");
-                add[i]=schematic.getAddBlockId()[counter++];
-            }
-            counter=0;
-            for(int i=1;i<add.length;i+=2)
-            {
-                add[i]=(byte) (add[i-1]&0xf);
-            }
-            for(int i=0;i<add.length;i+=2)
-            {
-                add[i]>>=4;
-            }
-            for(int i=0;i<add.length;i++)
-            {
-                add[i]<<=8;
-            }
-            for(int i=0;i<schematic.getRawBlocks().length;i++)
-            {
-                schematic.blocks[i]=(short)(schematic.rawBlocks[i] | add[i]);
+                schematic.blocks[i]|=((extraBlocks[i]) & 0xFF) << 8;
             }
         }
-        
         schematic.setBlockData(nbtSchematic.getByteArray("Data"));
         List<Entity> ents=new LinkedList<Entity>();
         NBTTagList entities=nbtSchematic.getTagList("Entities");

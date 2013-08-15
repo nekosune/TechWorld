@@ -9,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.nekokittygames.TechWorld.TechWorld;
+import com.nekokittygames.TechWorld.integration.BlockManager;
 import com.nekokittygames.TechWorld.tileEntities.SchematicTileEntity;
 
 public class SchematicManager {
@@ -70,7 +71,8 @@ public class SchematicManager {
                 }
                 catch(NumberFormatException e)
                 {
-                    //TODO: handle name of block here later
+                    blockNum=BlockManager.GetId(schemTile.getBlockName());
+                    
                 }
                 
                 try
@@ -83,6 +85,8 @@ public class SchematicManager {
                     //TODO: handle name of block data here later
                 }
                 world.setBlock(entity.xCoord+x, entity.yCoord+y, entity.zCoord+z,blockNum , blockData, 2);
+                TileEntity internalTE=TileEntity.createAndLoadEntity(schemTile.getTileEntity());
+                world.setBlockTileEntity(entity.xCoord+x, entity.yCoord+y, entity.zCoord+z, internalTE);
                 continue;
             }
             world.setBlockTileEntity(entity.xCoord+x, entity.yCoord+y, entity.zCoord+z, entity);

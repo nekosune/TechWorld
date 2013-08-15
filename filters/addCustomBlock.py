@@ -6,7 +6,7 @@ from pymclevel import TAG_Short
 from pymclevel import TAG_Double
 from pymclevel import TAG_String
 
-displayName = "Add Custom Mob Block"
+displayName = "Add Custom Block"
 
 noop = -1337
 inputs = (
@@ -29,6 +29,7 @@ def perform(level, box, options):
 				tileEnt["x"] = TAG_Int(x)
 				tileEnt["y"] = TAG_Int(y)
 				tileEnt["z"] = TAG_Int(z)
+				tileEnt["tileEntity"]=TAG_Compound()
 				chunk = level.getChunk(x/16, z/16)
 				chunk.TileEntities.append(tileEnt)
 				chunk.dirty = True

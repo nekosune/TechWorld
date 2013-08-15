@@ -7,11 +7,13 @@ public class SchematicTileEntity extends TileEntity {
 
     private String blockName;
     private String blockData;
+    private NBTTagCompound tileEntity;
     @Override
     public void readFromNBT(NBTTagCompound par1nbtTagCompound) {
         super.readFromNBT(par1nbtTagCompound);
         blockName=par1nbtTagCompound.getString("blockName");
         blockData=par1nbtTagCompound.getString("blockData");
+        tileEntity=par1nbtTagCompound.getCompoundTag("tileEntity");
     }
 
     @Override
@@ -19,6 +21,7 @@ public class SchematicTileEntity extends TileEntity {
         super.writeToNBT(par1nbtTagCompound);
         par1nbtTagCompound.setString("blockName", blockName);
         par1nbtTagCompound.setString("blockData", blockData);
+        par1nbtTagCompound.setCompoundTag("tileEntity", tileEntity);
     }
 
     /**
@@ -47,6 +50,20 @@ public class SchematicTileEntity extends TileEntity {
      */
     public void setBlockData(String blockData) {
         this.blockData = blockData;
+    }
+
+    /**
+     * @return the tileEntity
+     */
+    public NBTTagCompound getTileEntity() {
+        return tileEntity;
+    }
+
+    /**
+     * @param tileEntity the tileEntity to set
+     */
+    public void setTileEntity(NBTTagCompound tileEntity) {
+        this.tileEntity = tileEntity;
     }
 
 }
