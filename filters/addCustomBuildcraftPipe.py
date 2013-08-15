@@ -10,8 +10,37 @@ from pymclevel import TAG_String
 displayName = "Add Custom Simple Buildcraft Pipe"
 
 noop = -1337
+pipes={
+	'Wooden Transport Pipe': 'pipeItemsWood',
+	'Cobblestone Transport Pipe': 'pipeItemsCobblestone',
+	'Smoothstone Transport Pipe': 'pipeItemsStone',
+	'Gold Transport Pipe': 'pipeItemsGold',
+	'Iron Transport Pipe': 'pipeItemsIron',
+	'Diamond Transport Pipe': 'pipeItemsDiamond',
+	'Emerald Transport Pipe': 'pipeItemsEmerald',
+	'Obsidian Transport Pipe': 'pipeItemsObsidian',
+	'Lapis Transport Pipe': 'pipeItemsLapis',
+	'Daizuli Transport Pipe': 'pipeItemsDaizuli',
+	'Void Transport Pipe': 'pipeItemsVoid',
+	'Emerald Transport Pipe': 'pipeItemsEmerald',
+	'Sandstone Transport Pipe': 'pipeItemsSandstone',
+	'Wood Liquid Pipe': 'pipeFluidsWood',
+	'Cobblestone Liquid Pipe': 'pipeFluidsCobblestone',
+	'Stone Liquid Pipe': 'pipeFluidsStone',
+	'Iron Liquid Pipe': 'pipeFluidsIron',
+	'Gold Liquid Pipe': 'pipeFluidsGold',
+	'Void Liquid Pipe': 'pipeFluidsVoid',
+	'Sandstone Liquid Pipe': 'pipeFluidsSandstone',
+	'Emerald Liquid Pipe': 'pipeFluidsEmerald',
+	'Wood Power Pipe': 'pipePowerWood',
+	'Cobblestone Power Pipe': 'pipePowerCobblestone',
+	'Stone Power Pipe': 'pipePowerStone',
+	'Quartz Power Pipe': 'pipePowerQuartz',
+	'Gold Power Pipe': 'pipePowerGold',
+	'Diamond Power Pipe': 'pipePowerDiamond',
+}
 inputs = (
-	("Pipe Type",19416),
+	("Pipe Type",tuple(pipes.keys())),
 )
 
 
@@ -23,7 +52,7 @@ def perform(level, box, options):
 				level.setBlockAt(x,y,z,4093)
 				tileEnt=TAG_Compound()
 				tileEnt["id"] = TAG_String(u'schematicEntity')
-				tileEnt["blockName"]=TAG_String(unicode("BPipe"))
+				tileEnt["blockName"]=TAG_String(unicode("B-Pipe-"+pipes[pipeId]))
 				tileEnt["blockData"]=TAG_String(unicode(""))
 				tileEnt["x"] = TAG_Int(x)
 				tileEnt["y"] = TAG_Int(y)
@@ -54,7 +83,7 @@ def perform(level, box, options):
 				pipeEnt["facadeMeta[3]"]=TAG_Int(0)
 				pipeEnt["facadeMeta[4]"]=TAG_Int(0)
 				pipeEnt["facadeMeta[5]"]=TAG_Int(0)
-				pipeEnt["pipeId"]=TAG_Int(pipeId)
+				pipeEnt["pipeId"]=TAG_Int(19416)
 				pipeEnt["id"]=TAG_String(u"net.minecraft.src.buildcraft.transport.GenericPipe")
 				pipeEnt["travelingEntities"]=TAG_List()
 				tileEnt["tileEntity"]=pipeEnt

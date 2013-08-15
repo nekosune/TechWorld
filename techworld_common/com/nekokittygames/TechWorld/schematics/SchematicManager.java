@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 
 import com.nekokittygames.TechWorld.TechWorld;
 import com.nekokittygames.TechWorld.integration.BlockManager;
+import com.nekokittygames.TechWorld.integration.buildcraft.BuildcraftPipeParser;
 import com.nekokittygames.TechWorld.tileEntities.SchematicTileEntity;
 
 public class SchematicManager {
@@ -61,7 +62,13 @@ public class SchematicManager {
         {
             if(entity instanceof SchematicTileEntity)
             {
+                
                 SchematicTileEntity schemTile=(SchematicTileEntity)entity;
+                if(schemTile.getBlockName().startsWith("B-"))
+                {
+                    BuildcraftPipeParser.BuildCraftPlace(schemTile, world, x, y, z);
+                    continue;
+                }
                 int blockNum=0;
                 int blockData=0;
                 try
