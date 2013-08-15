@@ -6,6 +6,7 @@ import com.nekokittygames.TechWorld.blocks.BlockTechFire;
 import com.nekokittygames.TechWorld.blocks.BlockTechPortal;
 import com.nekokittygames.TechWorld.items.ItemLighter;
 import com.nekokittygames.TechWorld.items.ItemPortalPlacer;
+import com.nekokittygames.TechWorld.tileEntities.SchematicTileEntity;
 import com.nekokittygames.TechWorld.world.WorldProviderTechDimension;
 import com.nekokittygames.TechWorld.world.biomes.TechMainBiome;
 
@@ -59,6 +60,8 @@ public class TechWorld {
         GameRegistry.addShapedRecipe(new ItemStack(portalLighter),"rrr","rfr","rrr",'r',new ItemStack(Item.redstone),'f',new ItemStack(Item.flintAndSteel));
         DimensionManager.registerProviderType(Configs.TechDimensionID, WorldProviderTechDimension.class, true);
         DimensionManager.registerDimension(Configs.TechDimensionID, Configs.TechDimensionID);
+        
+        GameRegistry.registerTileEntity(SchematicTileEntity.class, "schematicEntity");
     }
 
     @EventHandler
@@ -78,6 +81,7 @@ public class TechWorld {
         portalSpawner=new ItemPortalPlacer(Configs.TechPortalPlacerID);
         portalLighter=new ItemLighter(Configs.TechFlintID);
         mainBiome=new TechMainBiome(Configs.MainBiomeID);
+        
     }
     /**
      * Gets the location of textures for this mod

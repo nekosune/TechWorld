@@ -51,7 +51,7 @@ public class ItemLighter extends Item {
                     "fire.ignite", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
             /** replace with your fire block **/
             par3World.setBlock(par4, par5, par6, TechWorld.fire.blockID);
-            Schematic trap=SchematicManager.loadSchematic("trap-house", par3World);
+            Schematic trap=SchematicManager.loadSchematic("TestSchematic", par3World);
             SchematicManager.PlaceSchematic(trap, par3World, par4, par5, par6);
             
         }

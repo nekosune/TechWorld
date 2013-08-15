@@ -9,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.nekokittygames.TechWorld.TechWorld;
+import com.nekokittygames.TechWorld.tileEntities.SchematicTileEntity;
 
 public class SchematicManager {
     
@@ -40,8 +41,10 @@ public class SchematicManager {
                         int index = i * schematic.getWidth() * schematic.getLength() + j * schematic.getWidth() + k;
                         short blockId=schematic.getBlocks()[index];
                         short blockMeta=schematic.getBlockData()[index];
-                        if(blockId<0)
-                            TechWorld.logging.severe("Got an error!");
+                        if(blockId==4093)
+                            continue;
+                        if(blockId<0 || blockId>=4096)
+                            TechWorld.logging.severe("Error here");
                         world.setBlock(k+x, i+y, j+z,blockId , blockMeta, 2);
                     }
                     catch(Exception e)
@@ -55,6 +58,33 @@ public class SchematicManager {
         TechWorld.logging.info(String.format("This array has %d indices", schematic.getBlocks().length));
         for(TileEntity entity:schematic.getTileEntities())
         {
+            if(entity instanceof SchematicTileEntity)
+            {
+                SchematicTileEntity schemTile=(SchematicTileEntity)entity;
+                int blockNum=0;
+                int blockData=0;
+                try
+                {
+                    blockNum=Integer.parseInt(schemTile.getBlockName());
+                    
+                }
+                catch(NumberFormatException e)
+                {
+                    //TODO: handle name of block here later
+                }
+                
+                try
+                {
+                    blockData=Integer.parseInt(schemTile.getBlockData());
+                    
+                }
+                catch(NumberFormatException e)
+                {
+                    //TODO: handle name of block data here later
+                }
+                world.setBlock(entity.xCoord+x, entity.yCoord+y, entity.zCoord+z,blockNum , blockData, 2);
+                continue;
+            }
             world.setBlockTileEntity(entity.xCoord+x, entity.yCoord+y, entity.zCoord+z, entity);
         }
     }
